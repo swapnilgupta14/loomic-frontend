@@ -123,14 +123,6 @@ export default function ComponentsPage() {
   const [iframeKey, setIframeKey] = useState<number>(0); // Force iframe reload
   const [isPreviewLoading, setIsPreviewLoading] = useState(false); // Show loader
   const { theme } = useTheme();
-  
-  // Window control states
-  const [isMinimizedCircle, setIsMinimizedCircle] = useState(false); // Red button - circular float
-  const [isMinimizedRect, setIsMinimizedRect] = useState(false); // Yellow button - bottom right rect
-  const [isMaximized, setIsMaximized] = useState(false); // Green button - maximized
-  const [circlePosition, setCirclePosition] = useState({ x: 100, y: 100 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // Find current component across all groups
   const currentComponent = componentGroups
@@ -222,81 +214,6 @@ export default function ComponentsPage() {
     window.open(previewUrl, "_blank");
   };
 
-  // Red button - Minimize to floating circle
-  const handleRedButton = () => {
-    if (isMinimizedCircle) {
-      // Re-open
-      setIsMinimizedCircle(false);
-    } else {
-      // Minimize to circle
-      setIsMinimizedCircle(true);
-      setIsMinimizedRect(false);
-      setIsMaximized(false);
-      setIsFullscreen(false);
-    }
-  };
-
-  // Yellow button - Minimize to bottom right rectangle
-  const handleYellowButton = () => {
-    if (!isMinimizedCircle && !isMinimizedRect) {
-      setIsMinimizedRect(true);
-      setIsMaximized(false);
-      setIsFullscreen(false);
-    }
-  };
-
-  // Green button - Maximize
-  const handleGreenButton = () => {
-    if (!isMaximized && !isMinimizedCircle && !isMinimizedRect) {
-      setIsMaximized(true);
-      setIsFullscreen(false);
-    }
-  };
-
-  // Drag handlers for circular minimized state
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (isMinimizedCircle) {
-      setIsDragging(true);
-      setDragOffset({
-        x: e.clientX - circlePosition.x,
-        y: e.clientY - circlePosition.y,
-      });
-    }
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging && isMinimizedCircle) {
-      const newX = e.clientX - dragOffset.x;
-      const newY = e.clientY - dragOffset.y;
-      
-      // Keep within bounds
-      const maxX = window.innerWidth - 80;
-      const maxY = window.innerHeight - 80;
-      
-      setCirclePosition({
-        x: Math.max(0, Math.min(newX, maxX)),
-        y: Math.max(0, Math.min(newY, maxY)),
-      });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // Add mouse move and up listeners
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDragging]);
-
   // Handle ESC key to exit fullscreen
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -315,7 +232,7 @@ export default function ComponentsPage() {
       <div className="max-w-[1600px] mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-[280px_1fr] gap-8">
           {/* Sidebar - Component List */}
-          <aside className="space-y-6">
+          <aside className="space-y-6 border-r border-clr-accent/20 pr-4">
             <div className="sticky top-24">
               {expandedCategory === null ? (
                 // CATEGORY LIST VIEW (Same design as expanded)
@@ -500,93 +417,33 @@ export default function ComponentsPage() {
               </div>
             </div>
 
-            {/* Circular Minimized State */}
-            {isMinimizedCircle && (
-              <div
-                className="fixed z-50 cursor-move"
-                style={{
-                  left: `${circlePosition.x}px`,
-                  top: `${circlePosition.y}px`,
-                  transition: isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                }}
-                onMouseDown={handleMouseDown}
-                onClick={handleRedButton}
-              >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-clr-primary via-clr-secondary to-clr-accent shadow-2xl hover:shadow-clr-primary/50 border-2 border-clr-border flex items-center justify-center backdrop-blur-sm animate-pulse hover:scale-110 transition-transform">
-                  <span className="text-xs text-white font-medium">Click</span>
-                </div>
-              </div>
-            )}
-
-            {/* Rectangle Minimized State - Bottom Right */}
-            {isMinimizedRect && (
-              <div
-                className="fixed bottom-4 right-4 z-50 cursor-pointer"
-                onClick={() => setIsMinimizedRect(false)}
-              >
-                <div className="w-24 h-48 rounded-lg bg-gradient-to-b from-clr-card via-clr-surface to-clr-card shadow-2xl border border-clr-border flex flex-col items-center justify-center gap-2 backdrop-blur-sm hover:scale-105 transition-all">
-                  <div className="text-xs text-clr-muted-foreground text-center px-2">
-                    {currentComponent?.name}
-                  </div>
-                  <div className="text-xs text-clr-primary font-medium">Click to restore</div>
-                </div>
-              </div>
-            )}
-
             {/* Preview Card - Iframe Secondary Screen */}
-            {!isMinimizedCircle && (
-              <Card className="bg-clr-card border-clr-border overflow-hidden">
-                {/* Browser Chrome */}
-                <div className="border-b border-clr-border px-4 py-3 bg-clr-surface/50 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleRedButton}
-                      disabled={false}
-                      className="w-3 h-3 rounded-full bg-clr-danger hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Minimize to floating circle"
-                    />
-                    <button
-                      onClick={handleYellowButton}
-                      disabled={isMinimizedCircle || isMinimizedRect}
-                      className="w-3 h-3 rounded-full bg-clr-warning hover:bg-yellow-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Minimize to bottom right"
-                    />
-                    <button
-                      onClick={handleGreenButton}
-                      disabled={isMaximized || isMinimizedCircle || isMinimizedRect}
-                      className="w-3 h-3 rounded-full bg-clr-success hover:bg-green-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Maximize"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2 flex-1 max-w-md mx-4">
-                    <div className="flex-1 px-3 py-1.5 rounded-md bg-clr-background/50 border border-clr-border text-xs text-clr-muted-foreground font-mono truncate">
-                      {previewUrl}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setIsFullscreen(!isFullscreen)}
-                      className="p-1.5 rounded hover:bg-clr-surface-hover transition-colors"
-                      aria-label="Toggle fullscreen"
-                    >
-                      <Maximize2 className="h-4 w-4 text-clr-muted-foreground" />
-                    </button>
-                    <span className="text-xs text-clr-muted-foreground font-mono">Live Preview</span>
+            <Card className="bg-clr-card border-clr-border overflow-hidden">
+              {/* Browser Chrome */}
+              <div className="border-b border-clr-border px-4 py-3 bg-clr-surface/50 flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-1 max-w-md">
+                  <div className="flex-1 px-3 py-1.5 rounded-md bg-clr-background/50 border border-clr-border text-xs text-clr-muted-foreground font-mono truncate">
+                    {previewUrl}
                   </div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-1.5 rounded hover:bg-clr-surface-hover transition-colors"
+                    aria-label="Toggle fullscreen"
+                  >
+                    <Maximize2 className="h-4 w-4 text-clr-muted-foreground" />
+                  </button>
+                  <span className="text-xs text-clr-muted-foreground font-mono">Live Preview</span>
+                </div>
+              </div>
 
-                {/* Iframe Container - Secondary Screen */}
-                <div
-                  className={`relative bg-clr-background transition-all duration-300 ${
-                    isFullscreen 
-                      ? "fixed inset-0 z-50" 
-                      : isMaximized 
-                        ? "h-[900px]" 
-                        : isMinimizedRect 
-                          ? "h-0 overflow-hidden" 
-                          : "h-[700px]"
-                  }`}
-                >
+              {/* Iframe Container - Secondary Screen */}
+              <div
+                className={`relative bg-clr-background transition-all duration-300 ${
+                  isFullscreen ? "fixed inset-0 z-50" : "h-[700px]"
+                }`}
+              >
                   {/* Loading Overlay - Minimal Cool Loader */}
                   {isPreviewLoading && (
                     <div className="absolute inset-0 z-10 bg-clr-background/80 backdrop-blur-md flex flex-col items-center justify-center gap-8 animate-fade-in">
@@ -620,16 +477,15 @@ export default function ComponentsPage() {
                     </button>
                   )}
 
-                  <iframe
-                    key={`${selectedComponent}-${currentTheme}-${theme}-${iframeKey}`}
-                    src={previewUrl}
-                    className="w-full h-full border-0"
-                    title={`Preview of ${currentComponent?.name}`}
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                </div>
-              </Card>
-            )}
+                <iframe
+                  key={`${selectedComponent}-${currentTheme}-${theme}-${iframeKey}`}
+                  src={previewUrl}
+                  className="w-full h-full border-0"
+                  title={`Preview of ${currentComponent?.name}`}
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              </div>
+            </Card>
           </main>
         </div>
       </div>

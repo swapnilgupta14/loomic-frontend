@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
 
-import { themeKeys, type ThemeName,themes } from "@/lib/themes";
+import { themeKeys, type ThemeName, themes } from "@/lib/themes";
 import { cn } from "@/lib/utils";
 
 /**
@@ -12,7 +12,11 @@ import { cn } from "@/lib/utils";
  * Allows users to select between different color themes
  * Works alongside dark mode - each theme has light and dark variants
  */
-export function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  mini?: boolean;
+}
+
+export function ThemeSwitcher({ mini = false }: ThemeSwitcherProps = {}) {
   const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeName>("default");
   const { theme: darkMode } = useTheme();
@@ -35,10 +39,13 @@ export function ThemeSwitcher() {
       const cardL = mode === "dark" ? bl + 3 : bl - 2;
       const surfaceL = mode === "dark" ? bl + 5 : bl - 4;
       const surfaceHoverL = mode === "dark" ? bl + 7 : bl - 6;
-      
+
       document.documentElement.style.setProperty("--clr-card", `${bh} ${bs}% ${cardL}%`);
       document.documentElement.style.setProperty("--clr-surface", `${bh} ${bs}% ${surfaceL}%`);
-      document.documentElement.style.setProperty("--clr-surface-hover", `${bh} ${bs}% ${surfaceHoverL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-surface-hover",
+        `${bh} ${bs}% ${surfaceHoverL}%`
+      );
 
       // Update hover states and subtle variants
       const subtleL = mode === "dark" ? 15 : 97;
@@ -52,13 +59,22 @@ export function ThemeSwitcher() {
       // Secondary
       const [sh, ss, sl] = colors.secondary.split(" ").map((v) => parseFloat(v));
       const secHoverL = mode === "dark" ? sl + 10 : sl - 10;
-      document.documentElement.style.setProperty("--clr-secondary-hover", `${sh} ${ss}% ${secHoverL}%`);
-      document.documentElement.style.setProperty("--clr-secondary-subtle", `${sh} ${ss}% ${subtleL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-secondary-hover",
+        `${sh} ${ss}% ${secHoverL}%`
+      );
+      document.documentElement.style.setProperty(
+        "--clr-secondary-subtle",
+        `${sh} ${ss}% ${subtleL}%`
+      );
 
       // Accent
       const [ah, as, al] = colors.accent.split(" ").map((v) => parseFloat(v));
       const accHoverL = mode === "dark" ? al + 10 : al - 10;
-      document.documentElement.style.setProperty("--clr-accent-hover", `${ah} ${as}% ${accHoverL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-accent-hover",
+        `${ah} ${as}% ${accHoverL}%`
+      );
       document.documentElement.style.setProperty("--clr-accent-subtle", `${ah} ${as}% ${subtleL}%`);
 
       // Save to localStorage
@@ -66,9 +82,11 @@ export function ThemeSwitcher() {
       setCurrentTheme(themeName);
 
       // Dispatch custom event for iframe updates with theme data
-      window.dispatchEvent(new CustomEvent("theme-changed", { 
-        detail: { theme: themeName } 
-      }));
+      window.dispatchEvent(
+        new CustomEvent("theme-changed", {
+          detail: { theme: themeName },
+        })
+      );
     },
     [darkMode]
   );
@@ -117,17 +135,15 @@ export function ThemeSwitcher() {
               className={cn(
                 "relative flex flex-col items-start p-3 rounded-lg border-2 transition-all",
                 "hover:border-clr-primary",
-                isActive
-                  ? "border-clr-primary"
-                  : "border-clr-border"
+                isActive ? "border-clr-primary" : "border-clr-border"
               )}
               style={{
-                backgroundColor: isActive 
-                  ? `hsl(${themeColors.background})` 
+                backgroundColor: isActive
+                  ? `hsl(${themeColors.background})`
                   : `hsl(${themeColors.background})`,
                 backgroundImage: isActive
                   ? `linear-gradient(135deg, hsl(${themeColors.primary} / 0.08), hsl(${themeColors.secondary} / 0.08))`
-                  : 'none'
+                  : "none",
               }}
             >
               {/* Active indicator */}
@@ -143,49 +159,52 @@ export function ThemeSwitcher() {
                   className="w-4 h-4 rounded-full border"
                   style={{
                     background: `linear-gradient(135deg, hsl(${themeColors.primary}), hsl(${themeColors.secondary}))`,
-                    borderColor: `hsl(${themeColors.primary} / 0.3)`
+                    borderColor: `hsl(${themeColors.primary} / 0.3)`,
                   }}
                 />
                 <div
                   className="w-4 h-4 rounded-full border"
                   style={{
                     background: `linear-gradient(135deg, hsl(${themeColors.secondary}), hsl(${themeColors.accent}))`,
-                    borderColor: `hsl(${themeColors.secondary} / 0.3)`
+                    borderColor: `hsl(${themeColors.secondary} / 0.3)`,
                   }}
                 />
                 <div
                   className="w-4 h-4 rounded-full border"
                   style={{
                     background: `linear-gradient(135deg, hsl(${themeColors.accent}), hsl(${themeColors.primary}))`,
-                    borderColor: `hsl(${themeColors.accent} / 0.3)`
+                    borderColor: `hsl(${themeColors.accent} / 0.3)`,
                   }}
                 />
               </div>
 
               {/* Theme name */}
               <div className="text-left">
-                <div 
-                  className="text-sm font-medium" 
+                <div
+                  className="text-sm font-medium"
                   style={{ color: `hsl(${themeColors.foreground})` }}
                 >
                   {theme.name}
                 </div>
-                <div 
-                  className="text-xs mt-0.5" 
-                  style={{ color: `hsl(${themeColors.foreground} / 0.6)` }}
-                >
-                  {theme.description}
-                </div>
+                {!mini && (
+                  <div
+                    className="text-xs mt-0.5"
+                    style={{ color: `hsl(${themeColors.foreground} / 0.6)` }}
+                  >
+                    {theme.description}
+                  </div>
+                )}
               </div>
             </button>
           );
         })}
       </div>
 
-      <p className="text-xs text-clr-muted-foreground mt-3">
-        Themes adapt to light/dark mode automatically
-      </p>
+      {!mini && (
+        <p className="text-xs text-clr-muted-foreground mt-3">
+          Themes adapt to light/dark mode automatically
+        </p>
+      )}
     </div>
   );
 }
-

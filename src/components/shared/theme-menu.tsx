@@ -103,7 +103,7 @@ export function ThemeMenu() {
   if (!mounted) {
     return (
       <button
-        className="relative p-2 rounded-lg border border-clr-border hover:bg-clr-surface-hover transition-colors"
+        className="relative w-10 h-10 rounded-lg border border-clr-border flex items-center justify-center"
         aria-label="Theme selector"
       >
         <Palette className="h-5 w-5 text-clr-foreground" />
@@ -131,7 +131,7 @@ export function ThemeMenu() {
       {/* Icon Button */}
       <button
         className={cn(
-          "relative p-2 rounded-lg border transition-all",
+          "relative w-10 h-10 rounded-lg border transition-all flex items-center justify-center",
           isOpen
             ? "border-clr-primary bg-clr-primary-subtle"
             : "border-clr-border hover:bg-clr-surface-hover"

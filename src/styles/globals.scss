@@ -281,3 +281,45 @@
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
+
+/* ===== CUSTOM SCROLLBAR STYLING ===== */
+/* Slim, subtle scrollbar that adapts to theme and mode */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--clr-primary) / 0.2) transparent;
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--clr-primary) / 0.15);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--clr-primary) / 0.3);
+}
+
+/* Dark mode adjustments */
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--clr-primary) / 0.25);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--clr-primary) / 0.4);
+}
+
+.dark * {
+  scrollbar-color: hsl(var(--clr-primary) / 0.3) transparent;
+}
