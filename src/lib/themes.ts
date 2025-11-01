@@ -5,14 +5,14 @@
 
 export const themes = {
   default: {
-    name: "Pitch Black",
-    description: "Pure black with neon ambience",
+    name: "Loomic Theme",
+    description: "Our signature brand colors",
     colors: {
       light: {
         primary: "180 100% 50%", // Cyan
         secondary: "280 100% 60%", // Electric Purple
         accent: "330 100% 50%", // Neon Pink
-        background: "0 0% 98%",
+        background: "0 0% 100%", // Pure white
         foreground: "0 0% 10%",
       },
       dark: {
@@ -25,14 +25,14 @@ export const themes = {
     },
   },
   loomic: {
-    name: "Loomic",
+    name: "Violet Dreams",
     description: "Premium violet and teal",
     colors: {
       light: {
         primary: "258 90% 66%", // Violet
         secondary: "173 80% 40%", // Teal
         accent: "250 90% 60%", // Purple-Blue
-        background: "0 0% 100%",
+        background: "258 25% 96%", // Pastel violet
         foreground: "222.2 84% 4.9%",
       },
       dark: {
@@ -52,7 +52,7 @@ export const themes = {
         primary: "200 100% 45%", // Blue
         secondary: "185 100% 40%", // Cyan
         accent: "220 90% 50%", // Deep blue
-        background: "200 40% 98%", // Very light blue
+        background: "200 30% 95%", // Pastel ocean blue
         foreground: "200 100% 10%",
       },
       dark: {
@@ -72,7 +72,7 @@ export const themes = {
         primary: "15 100% 55%", // Orange
         secondary: "350 100% 60%", // Pink
         accent: "30 100% 50%", // Gold
-        background: "20 60% 98%", // Warm white
+        background: "20 35% 95%", // Pastel warm peach
         foreground: "15 80% 15%",
       },
       dark: {
@@ -92,7 +92,7 @@ export const themes = {
         primary: "140 60% 40%", // Forest green
         secondary: "160 50% 45%", // Teal green
         accent: "80 60% 50%", // Lime
-        background: "140 30% 98%", // Light green tint
+        background: "140 22% 95%", // Pastel mint green
         foreground: "140 70% 15%",
       },
       dark: {
@@ -112,7 +112,7 @@ export const themes = {
         primary: "350 90% 50%", // Crimson
         secondary: "280 80% 55%", // Purple
         accent: "330 100% 45%", // Rose
-        background: "350 40% 98%", // Light pink tint
+        background: "350 28% 95%", // Pastel rose pink
         foreground: "350 80% 15%",
       },
       dark: {
@@ -132,7 +132,7 @@ export const themes = {
         primary: "260 60% 50%", // Deep purple
         secondary: "230 70% 50%", // Navy blue
         accent: "280 80% 60%", // Bright purple
-        background: "250 30% 98%", // Light purple tint
+        background: "250 24% 96%", // Pastel lavender
         foreground: "260 70% 15%",
       },
       dark: {

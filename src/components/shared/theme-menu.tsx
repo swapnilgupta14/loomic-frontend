@@ -24,11 +24,22 @@ export function ThemeMenu() {
       const mode = darkMode === "dark" ? "dark" : "light";
       const colors = theme.colors[mode];
 
-      // Apply ONLY branding colors (primary, secondary, accent)
-      // Background stays with the dark/light mode theme
+      // Apply ALL theme colors including background and foreground
+      document.documentElement.style.setProperty("--clr-background", colors.background);
+      document.documentElement.style.setProperty("--clr-foreground", colors.foreground);
       document.documentElement.style.setProperty("--clr-primary", colors.primary);
       document.documentElement.style.setProperty("--clr-secondary", colors.secondary);
       document.documentElement.style.setProperty("--clr-accent", colors.accent);
+
+      // Update surface colors based on background
+      const [bh, bs, bl] = colors.background.split(" ").map((v) => parseFloat(v));
+      const cardL = mode === "dark" ? bl + 3 : bl - 2;
+      const surfaceL = mode === "dark" ? bl + 5 : bl - 4;
+      const surfaceHoverL = mode === "dark" ? bl + 7 : bl - 6;
+      
+      document.documentElement.style.setProperty("--clr-card", `${bh} ${bs}% ${cardL}%`);
+      document.documentElement.style.setProperty("--clr-surface", `${bh} ${bs}% ${surfaceL}%`);
+      document.documentElement.style.setProperty("--clr-surface-hover", `${bh} ${bs}% ${surfaceHoverL}%`);
 
       // Update hover states and subtle variants
       const subtleL = mode === "dark" ? 15 : 97;
@@ -141,6 +152,8 @@ export function ThemeMenu() {
             {themeKeys.map((key) => {
               const theme = themes[key];
               const isActive = currentTheme === key;
+              const mode = darkMode === "dark" ? "dark" : "light";
+              const themeColors = theme.colors[mode];
 
               return (
                 <button
@@ -150,41 +163,65 @@ export function ThemeMenu() {
                     setIsOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 p-2 rounded-md transition-all text-left",
-                    "hover:bg-clr-primary-subtle",
-                    isActive ? "bg-clr-primary-subtle" : ""
+                    "w-full flex items-center gap-3 p-2 rounded-md transition-all text-left border",
+                    isActive ? "border-opacity-40" : "border-transparent"
                   )}
+                  style={{
+                    backgroundColor: `hsl(${themeColors.background})`,
+                    borderColor: isActive ? `hsl(${themeColors.primary})` : 'transparent',
+                    backgroundImage: isActive
+                      ? `linear-gradient(90deg, hsl(${themeColors.primary} / 0.05), hsl(${themeColors.secondary} / 0.05))`
+                      : 'none'
+                  }}
                 >
-                  {/* Color Preview Dots */}
+                  {/* Color Preview Dots - with gradient */}
                   <div className="flex gap-0.5">
                     <div
-                      className="w-3 h-3 rounded-full border border-clr-border"
+                      className="w-3 h-3 rounded-full border"
                       style={{
-                        backgroundColor: `hsl(${theme.colors.light.primary})`,
+                        background: `linear-gradient(135deg, hsl(${themeColors.primary}), hsl(${themeColors.secondary}))`,
+                        borderColor: `hsl(${themeColors.primary} / 0.3)`
                       }}
                     />
                     <div
-                      className="w-3 h-3 rounded-full border border-clr-border"
+                      className="w-3 h-3 rounded-full border"
                       style={{
-                        backgroundColor: `hsl(${theme.colors.light.secondary})`,
+                        background: `linear-gradient(135deg, hsl(${themeColors.secondary}), hsl(${themeColors.accent}))`,
+                        borderColor: `hsl(${themeColors.secondary} / 0.3)`
                       }}
                     />
                     <div
-                      className="w-3 h-3 rounded-full border border-clr-border"
+                      className="w-3 h-3 rounded-full border"
                       style={{
-                        backgroundColor: `hsl(${theme.colors.light.accent})`,
+                        background: `linear-gradient(135deg, hsl(${themeColors.accent}), hsl(${themeColors.primary}))`,
+                        borderColor: `hsl(${themeColors.accent} / 0.3)`
                       }}
                     />
                   </div>
 
                   {/* Theme Name */}
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-clr-foreground">{theme.name}</div>
-                    <div className="text-xs text-clr-muted-foreground">{theme.description}</div>
+                    <div 
+                      className="text-sm font-medium" 
+                      style={{ color: `hsl(${themeColors.foreground})` }}
+                    >
+                      {theme.name}
+                    </div>
+                    <div 
+                      className="text-xs" 
+                      style={{ color: `hsl(${themeColors.foreground} / 0.6)` }}
+                    >
+                      {theme.description}
+                    </div>
                   </div>
 
                   {/* Active Indicator */}
-                  {isActive && <Check className="h-4 w-4 text-clr-primary" />}
+                  {isActive && (
+                    <Check 
+                      className="h-4 w-4" 
+                      style={{ color: `hsl(${themeColors.primary})` }} 
+                    />
+                  )}
                 </button>
               );
             })}
