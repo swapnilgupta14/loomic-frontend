@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound, redirect, useSearchParams } from "next/navigation";
-import { use, useEffect } from "react";
+import { Suspense, use, useEffect } from "react";
 
 import {
   FloatingNavHeader,
@@ -29,7 +29,7 @@ const componentMap = {
   "minimalist-center": MinimalistCenterHeader,
 } as const;
 
-export default function PreviewPage({
+function PreviewPageContent({
   params,
 }: {
   params: Promise<{ component: string }>;
@@ -243,3 +243,18 @@ export default function PreviewPage({
   );
 }
 
+export default function PreviewPage({
+  params,
+}: {
+  params: Promise<{ component: string }>;
+}) {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-clr-background flex items-center justify-center">
+        <div className="text-clr-muted-foreground">Loading...</div>
+      </div>
+    }>
+      <PreviewPageContent params={params} />
+    </Suspense>
+  );
+}

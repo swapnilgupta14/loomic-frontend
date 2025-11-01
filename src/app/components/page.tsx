@@ -19,7 +19,7 @@ import {
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-import { AppHeader, LoadingSpinner } from "@/components/shared";
+import { AppHeader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 

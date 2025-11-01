@@ -2,7 +2,7 @@
 
 import { Info, User, Zap } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 import {
   ArrowTooltip,
@@ -20,7 +20,7 @@ import { type ThemeName, themes } from "@/lib/themes";
  * Showcase all tooltip variations
  */
 
-export default function TooltipsPreview() {
+function TooltipsPreviewContent() {
   const searchParams = useSearchParams();
 
   // Get theme parameters from URL
@@ -234,3 +234,14 @@ export default function TooltipsPreview() {
   );
 }
 
+export default function TooltipsPreview() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-clr-background flex items-center justify-center">
+        <div className="text-clr-muted-foreground">Loading...</div>
+      </div>
+    }>
+      <TooltipsPreviewContent />
+    </Suspense>
+  );
+}
