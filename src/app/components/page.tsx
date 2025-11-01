@@ -153,7 +153,6 @@ export default function ComponentsPage() {
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "loomic-theme" && e.newValue) {
-        console.log("📦 Storage event - new theme:", e.newValue);
         setCurrentTheme(e.newValue);
       }
     };
@@ -161,7 +160,6 @@ export default function ComponentsPage() {
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
       const newTheme = customEvent.detail?.theme || localStorage.getItem("loomic-theme") || "default";
-      console.log("🎯 Components Page: Received theme-changed event for:", newTheme);
       setCurrentTheme(newTheme);
     };
 
@@ -176,7 +174,6 @@ export default function ComponentsPage() {
 
   // Force iframe reload when theme or dark mode changes
   useEffect(() => {
-    console.log("🔄 Reloading iframe with Theme:", currentTheme, "Mode:", theme);
     setIsPreviewLoading(true);
     setIframeKey(prev => prev + 1);
     

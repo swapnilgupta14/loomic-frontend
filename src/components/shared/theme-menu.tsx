@@ -56,7 +56,6 @@ export function ThemeMenu() {
       setCurrentTheme(themeName);
 
       // Dispatch custom event for iframe updates with theme data
-      console.log("🎨 ThemeMenu: Dispatching theme-changed event for:", themeName);
       window.dispatchEvent(new CustomEvent("theme-changed", { 
         detail: { theme: themeName } 
       }));
