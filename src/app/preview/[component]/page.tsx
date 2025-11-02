@@ -95,7 +95,7 @@ function PreviewPageContent({
 
     // Add custom beigish background for light mode preview
     if (mode === "light") {
-      document.documentElement.style.setProperty("--clr-background", "40 15% 96%"); // Beigish light background
+      document.documentElement.style.setProperty("--clr-background", "40 9% 96%"); // Beigish light background (reduced saturation by 40%)
       document.documentElement.style.setProperty("--clr-foreground", "240 10% 10%");
     }
   }, [themeParam, modeParam]);

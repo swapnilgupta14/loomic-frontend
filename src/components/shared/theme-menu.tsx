@@ -36,10 +36,13 @@ export function ThemeMenu() {
       const cardL = mode === "dark" ? bl + 3 : bl - 2;
       const surfaceL = mode === "dark" ? bl + 5 : bl - 4;
       const surfaceHoverL = mode === "dark" ? bl + 7 : bl - 6;
-      
+
       document.documentElement.style.setProperty("--clr-card", `${bh} ${bs}% ${cardL}%`);
       document.documentElement.style.setProperty("--clr-surface", `${bh} ${bs}% ${surfaceL}%`);
-      document.documentElement.style.setProperty("--clr-surface-hover", `${bh} ${bs}% ${surfaceHoverL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-surface-hover",
+        `${bh} ${bs}% ${surfaceHoverL}%`
+      );
 
       // Update hover states and subtle variants
       const subtleL = mode === "dark" ? 15 : 97;
@@ -53,13 +56,22 @@ export function ThemeMenu() {
       // Secondary
       const [sh, ss, sl] = colors.secondary.split(" ").map((v) => parseFloat(v));
       const secHoverL = mode === "dark" ? sl + 10 : sl - 10;
-      document.documentElement.style.setProperty("--clr-secondary-hover", `${sh} ${ss}% ${secHoverL}%`);
-      document.documentElement.style.setProperty("--clr-secondary-subtle", `${sh} ${ss}% ${subtleL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-secondary-hover",
+        `${sh} ${ss}% ${secHoverL}%`
+      );
+      document.documentElement.style.setProperty(
+        "--clr-secondary-subtle",
+        `${sh} ${ss}% ${subtleL}%`
+      );
 
       // Accent
       const [ah, as, al] = colors.accent.split(" ").map((v) => parseFloat(v));
       const accHoverL = mode === "dark" ? al + 10 : al - 10;
-      document.documentElement.style.setProperty("--clr-accent-hover", `${ah} ${as}% ${accHoverL}%`);
+      document.documentElement.style.setProperty(
+        "--clr-accent-hover",
+        `${ah} ${as}% ${accHoverL}%`
+      );
       document.documentElement.style.setProperty("--clr-accent-subtle", `${ah} ${as}% ${subtleL}%`);
 
       // Save to localStorage
@@ -67,9 +79,11 @@ export function ThemeMenu() {
       setCurrentTheme(themeName);
 
       // Dispatch custom event for iframe updates with theme data
-      window.dispatchEvent(new CustomEvent("theme-changed", { 
-        detail: { theme: themeName } 
-      }));
+      window.dispatchEvent(
+        new CustomEvent("theme-changed", {
+          detail: { theme: themeName },
+        })
+      );
     },
     [darkMode]
   );
@@ -100,6 +114,20 @@ export function ThemeMenu() {
     };
   }, [closeTimeout]);
 
+  // Listen for ThemeToggle opening to close this menu
+  useEffect(() => {
+    const handleOtherMenuOpen = () => {
+      setIsOpen(false);
+      if (closeTimeout) {
+        clearTimeout(closeTimeout);
+        setCloseTimeout(null);
+      }
+    };
+
+    window.addEventListener("theme-toggle-opened", handleOtherMenuOpen);
+    return () => window.removeEventListener("theme-toggle-opened", handleOtherMenuOpen);
+  }, [closeTimeout]);
+
   if (!mounted) {
     return (
       <button
@@ -117,6 +145,8 @@ export function ThemeMenu() {
       setCloseTimeout(null);
     }
     setIsOpen(true);
+    // Notify other menus to close
+    window.dispatchEvent(new Event("theme-menu-opened"));
   };
 
   const handleMouseLeave = () => {
@@ -143,7 +173,7 @@ export function ThemeMenu() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-80 bg-clr-card border border-clr-border rounded-lg shadow-2xl p-3 z-50 animate-fade-in">
+        <div className="absolute top-full right-0 mt-6 w-80 bg-clr-card border border-clr-border rounded-lg shadow-2xl p-3 z-50 animate-fade-in">
           <h3 className="text-xs font-semibold text-clr-muted-foreground uppercase tracking-wider mb-2">
             Choose Theme
           </h3>
@@ -168,10 +198,10 @@ export function ThemeMenu() {
                   )}
                   style={{
                     backgroundColor: `hsl(${themeColors.background})`,
-                    borderColor: isActive ? `hsl(${themeColors.primary})` : 'transparent',
+                    borderColor: isActive ? `hsl(${themeColors.primary})` : "transparent",
                     backgroundImage: isActive
                       ? `linear-gradient(90deg, hsl(${themeColors.primary} / 0.05), hsl(${themeColors.secondary} / 0.05))`
-                      : 'none'
+                      : "none",
                   }}
                 >
                   {/* Color Preview Dots - with gradient */}
@@ -180,35 +210,35 @@ export function ThemeMenu() {
                       className="w-3 h-3 rounded-full border"
                       style={{
                         background: `linear-gradient(135deg, hsl(${themeColors.primary}), hsl(${themeColors.secondary}))`,
-                        borderColor: `hsl(${themeColors.primary} / 0.3)`
+                        borderColor: `hsl(${themeColors.primary} / 0.3)`,
                       }}
                     />
                     <div
                       className="w-3 h-3 rounded-full border"
                       style={{
                         background: `linear-gradient(135deg, hsl(${themeColors.secondary}), hsl(${themeColors.accent}))`,
-                        borderColor: `hsl(${themeColors.secondary} / 0.3)`
+                        borderColor: `hsl(${themeColors.secondary} / 0.3)`,
                       }}
                     />
                     <div
                       className="w-3 h-3 rounded-full border"
                       style={{
                         background: `linear-gradient(135deg, hsl(${themeColors.accent}), hsl(${themeColors.primary}))`,
-                        borderColor: `hsl(${themeColors.accent} / 0.3)`
+                        borderColor: `hsl(${themeColors.accent} / 0.3)`,
                       }}
                     />
                   </div>
 
                   {/* Theme Name */}
                   <div className="flex-1">
-                    <div 
-                      className="text-sm font-medium" 
+                    <div
+                      className="text-sm font-medium"
                       style={{ color: `hsl(${themeColors.foreground})` }}
                     >
                       {theme.name}
                     </div>
-                    <div 
-                      className="text-xs" 
+                    <div
+                      className="text-xs"
                       style={{ color: `hsl(${themeColors.foreground} / 0.6)` }}
                     >
                       {theme.description}
@@ -217,10 +247,7 @@ export function ThemeMenu() {
 
                   {/* Active Indicator */}
                   {isActive && (
-                    <Check 
-                      className="h-4 w-4" 
-                      style={{ color: `hsl(${themeColors.primary})` }} 
-                    />
+                    <Check className="h-4 w-4" style={{ color: `hsl(${themeColors.primary})` }} />
                   )}
                 </button>
               );

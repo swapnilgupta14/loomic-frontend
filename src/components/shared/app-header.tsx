@@ -1,9 +1,12 @@
 "use client";
 
-import { Code2 } from "lucide-react";
+import { Code2, LogOut, User as UserIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { ThemeMenu, ThemeToggle } from "@/components/shared";
+import { useAuth } from "@/contexts/auth-context";
+import { Button } from "@/components/ui/button";
 
 /**
  * App Header Component
@@ -16,6 +19,14 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ showBreadcrumb = false, breadcrumbText }: AppHeaderProps) {
+  const router = useRouter();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
+
   return (
     <header className="border-b border-clr-border/50 bg-clr-background/80 backdrop-blur-xl sticky top-0 z-50">
       <div className="max-w-[1600px] mx-auto px-6">
@@ -61,6 +72,54 @@ export function AppHeader({ showBreadcrumb = false, breadcrumbText }: AppHeaderP
               <ThemeMenu />
               <ThemeToggle />
             </div>
+
+            <div className="w-px h-5 bg-clr-border" />
+
+            {/* Auth Actions */}
+            {isAuthenticated ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-clr-surface/50">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-clr-primary to-clr-accent flex items-center justify-center">
+                    <span className="text-white text-xs font-medium">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-sm text-clr-foreground font-medium">
+                    {user?.name}
+                  </span>
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="ghost"
+                  size="sm"
+                  className="text-clr-muted-foreground hover:text-clr-foreground"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden md:inline ml-2">Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-clr-muted-foreground hover:text-clr-foreground"
+                  >
+                    <UserIcon className="h-4 w-4" />
+                    <span className="hidden md:inline ml-2">Login</span>
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-clr-accent to-clr-primary hover:opacity-90 text-white"
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

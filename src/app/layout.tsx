@@ -3,7 +3,9 @@ import "@/styles/globals.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+// import { CursorFollower } from "@/components/shared";
 import ThemeProvider from "@/providers/theme-provider";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +43,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="antialiased bg-clr-background text-clr-foreground min-h-screen">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+            {/* <CursorFollower /> */}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
  * Makes imports cleaner: import { ThemeToggle } from "@/components/shared"
  */
 export { AppHeader } from "./app-header";
+export { CursorFollower } from "./cursor-follower";
 export { HeroSection } from "./hero-section";
 export { LoadingSpinner } from "./loading-spinner";
 export { ThemeMenu } from "./theme-menu";

@@ -5,135 +5,135 @@
 @layer base {
   :root {
     /* ===== LIGHT THEME - SEMANTIC COLOR TOKENS (clr- prefix) ===== */
-    
+
     /* Base */
-    --clr-background: 0 0% 100%;
+    --clr-background: 40 9% 96%; /* Subtle beige background (reduced saturation by 40%) */
     --clr-foreground: 222.2 84% 4.9%;
-    
+
     /* Primary (Brand Violet) */
     --clr-primary: 258 90% 66%; /* #8B5CF6 */
     --clr-primary-foreground: 0 0% 100%;
     --clr-primary-hover: 258 86% 60%; /* #7C3AED */
     --clr-primary-subtle: 258 100% 97%; /* #F5F3FF */
-    
+
     /* Secondary (Teal) */
     --clr-secondary: 173 80% 40%; /* #14B8A6 */
     --clr-secondary-foreground: 0 0% 100%;
     --clr-secondary-hover: 173 84% 32%; /* #0D9488 */
     --clr-secondary-subtle: 173 76% 94%;
-    
+
     /* Accent (Purple-Blue) */
     --clr-accent: 250 90% 60%;
     --clr-accent-foreground: 0 0% 100%;
     --clr-accent-hover: 250 90% 50%;
     --clr-accent-subtle: 250 100% 96%;
-    
+
     /* Muted */
     --clr-muted: 210 40% 96.1%;
     --clr-muted-foreground: 215.4 16.3% 46.9%;
-    
+
     /* Card & Surface */
     --clr-card: 0 0% 100%;
     --clr-card-foreground: 222.2 84% 4.9%;
     --clr-surface: 0 0% 98%;
     --clr-surface-hover: 0 0% 96%;
-    
+
     /* Popover */
     --clr-popover: 0 0% 100%;
     --clr-popover-foreground: 222.2 84% 4.9%;
-    
+
     /* Status Colors */
     --clr-danger: 0 84.2% 60.2%; /* Red */
     --clr-danger-foreground: 0 0% 100%;
     --clr-danger-hover: 0 84.2% 50%;
     --clr-danger-subtle: 0 100% 97%;
-    
+
     --clr-warning: 38 92% 50%; /* Amber */
     --clr-warning-foreground: 0 0% 100%;
     --clr-warning-hover: 36 100% 42%;
     --clr-warning-subtle: 38 100% 95%;
-    
+
     --clr-success: 142 76% 36%; /* Green */
     --clr-success-foreground: 0 0% 100%;
     --clr-success-hover: 142 76% 28%;
     --clr-success-subtle: 142 76% 96%;
-    
+
     --clr-info: 199 89% 48%; /* Blue */
     --clr-info-foreground: 0 0% 100%;
     --clr-info-hover: 199 89% 38%;
     --clr-info-subtle: 199 89% 96%;
-    
+
     /* Borders & Inputs */
-    --clr-border: 214.3 31.8% 91.4%;
-    --clr-input: 214.3 31.8% 91.4%;
+    --clr-border: 0 0% 90%; /* Neutral greyish border */
+    --clr-input: 0 0% 90%;
     --clr-ring: 258 90% 66%;
-    
+
     /* Border Radius */
     --radius: 0.5rem;
   }
 
   .dark {
     /* ===== PITCH BLACK THEME - NEON AMBIENCE (clr- prefix) ===== */
-    
+
     /* Base - Pitch Black */
     --clr-background: 0 0% 3%; /* #080808 - Pure pitch black */
     --clr-foreground: 0 0% 95%; /* #F2F2F2 - Soft white */
-    
+
     /* Primary (Glowing Cyan) */
     --clr-primary: 180 100% 60%; /* #00E5E5 - Neon Cyan */
     --clr-primary-foreground: 0 0% 0%;
     --clr-primary-hover: 180 100% 70%; /* Brighter on hover */
     --clr-primary-subtle: 180 100% 8%; /* Dark cyan glow bg */
-    
+
     /* Secondary (Electric Purple) */
     --clr-secondary: 280 100% 70%; /* #CC33FF - Electric Purple */
     --clr-secondary-foreground: 0 0% 0%;
     --clr-secondary-hover: 280 100% 80%;
     --clr-secondary-subtle: 280 100% 8%;
-    
+
     /* Accent (Neon Pink) */
     --clr-accent: 330 100% 60%; /* #FF0080 - Neon Pink */
     --clr-accent-foreground: 0 0% 100%;
     --clr-accent-hover: 330 100% 70%;
     --clr-accent-subtle: 330 100% 8%;
-    
+
     /* Muted */
     --clr-muted: 0 0% 12%; /* Very dark grey */
     --clr-muted-foreground: 0 0% 55%; /* #8C8C8C */
-    
+
     /* Card & Surface - Barely visible layers with subtle glow */
     --clr-card: 0 0% 6%; /* #0F0F0F - Almost black */
     --clr-card-foreground: 0 0% 95%;
     --clr-surface: 0 0% 8%; /* #141414 */
     --clr-surface-hover: 0 0% 12%; /* #1F1F1F */
-    
+
     /* Popover */
     --clr-popover: 0 0% 6%;
     --clr-popover-foreground: 0 0% 95%;
-    
+
     /* Status Colors (Neon bright for dark mode) */
     --clr-danger: 0 100% 60%; /* #FF3333 - Neon red */
     --clr-danger-foreground: 0 0% 100%;
     --clr-danger-hover: 0 100% 70%;
     --clr-danger-subtle: 0 100% 8%;
-    
+
     --clr-warning: 45 100% 55%; /* #FFCC00 - Neon amber */
     --clr-warning-foreground: 0 0% 0%;
     --clr-warning-hover: 45 100% 65%;
     --clr-warning-subtle: 45 100% 8%;
-    
+
     --clr-success: 140 100% 50%; /* #00FF66 - Neon green */
     --clr-success-foreground: 0 0% 0%;
     --clr-success-hover: 140 100% 60%;
     --clr-success-subtle: 140 100% 8%;
-    
+
     --clr-info: 200 100% 55%; /* #0099FF - Neon blue */
     --clr-info-foreground: 0 0% 100%;
     --clr-info-hover: 200 100% 65%;
     --clr-info-subtle: 200 100% 8%;
-    
-    /* Borders & Inputs - Subtle with hint of primary */
-    --clr-border: 180 20% 15%; /* Dark with cyan tint */
+
+    /* Borders & Inputs - Subtle neutral grey */
+    --clr-border: 0 0% 18%; /* Neutral greyish border */
     --clr-input: 0 0% 10%;
     --clr-ring: 180 100% 60%; /* Cyan glow */
   }
@@ -189,21 +189,33 @@
 
   /* ===== GRADIENT TEXT - Semantic tokens with clr- prefix ===== */
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--clr-primary)) 0%, hsl(var(--clr-primary-hover)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--clr-primary)) 0%,
+      hsl(var(--clr-primary-hover)) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-secondary {
-    background: linear-gradient(135deg, hsl(var(--clr-secondary)) 0%, hsl(var(--clr-secondary-hover)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--clr-secondary)) 0%,
+      hsl(var(--clr-secondary-hover)) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-accent {
-    background: linear-gradient(135deg, hsl(var(--clr-accent)) 0%, hsl(var(--clr-accent-hover)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--clr-accent)) 0%,
+      hsl(var(--clr-accent-hover)) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

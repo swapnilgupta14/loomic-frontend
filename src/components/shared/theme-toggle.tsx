@@ -31,6 +31,20 @@ export function ThemeToggle() {
     };
   }, [closeTimeout]);
 
+  // Listen for ThemeMenu opening to close this menu
+  useEffect(() => {
+    const handleOtherMenuOpen = () => {
+      setIsOpen(false);
+      if (closeTimeout) {
+        clearTimeout(closeTimeout);
+        setCloseTimeout(null);
+      }
+    };
+
+    window.addEventListener("theme-menu-opened", handleOtherMenuOpen);
+    return () => window.removeEventListener("theme-menu-opened", handleOtherMenuOpen);
+  }, [closeTimeout]);
+
   if (!mounted) {
     return (
       <button
@@ -48,6 +62,8 @@ export function ThemeToggle() {
       setCloseTimeout(null);
     }
     setIsOpen(true);
+    // Notify other menus to close
+    window.dispatchEvent(new Event("theme-toggle-opened"));
   };
 
   const handleMouseLeave = () => {
@@ -64,7 +80,7 @@ export function ThemeToggle() {
 
   // Determine current display icon
   const isDark = theme === "dark" || (theme === "system" && systemTheme === "dark");
-  
+
   const modes = [
     {
       id: "light",
@@ -89,7 +105,7 @@ export function ThemeToggle() {
   return (
     <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {/* Icon Button */}
-    <button
+      <button
         className={cn(
           "relative w-10 h-10 rounded-lg border transition-all flex items-center justify-center",
           isOpen
@@ -99,21 +115,17 @@ export function ThemeToggle() {
         aria-label="Theme mode selector"
       >
         <div className="relative w-5 h-5">
-      <Sun
+          <Sun
             className={cn(
               "h-5 w-5 absolute inset-0 transition-all duration-300",
-          isDark
-            ? "rotate-90 scale-0 opacity-0"
-                : "rotate-0 scale-100 opacity-100",
+              isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100",
               isOpen ? "text-clr-primary" : "text-clr-foreground"
             )}
-      />
-      <Moon
+          />
+          <Moon
             className={cn(
               "h-5 w-5 absolute inset-0 transition-all duration-300",
-          isDark
-            ? "rotate-0 scale-100 opacity-100"
-                : "rotate-90 scale-0 opacity-0",
+              isDark ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0",
               isOpen ? "text-clr-primary" : "text-clr-foreground"
             )}
           />
@@ -122,7 +134,7 @@ export function ThemeToggle() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-64 bg-clr-card border border-clr-border rounded-lg shadow-2xl p-3 z-50 animate-fade-in">
+        <div className="absolute top-full right-0 mt-6 w-64 bg-clr-card border border-clr-border rounded-lg shadow-2xl p-3 z-50 animate-fade-in">
           <h3 className="text-xs font-semibold text-clr-muted-foreground uppercase tracking-wider mb-2">
             Display Mode
           </h3>
@@ -143,10 +155,14 @@ export function ThemeToggle() {
                   )}
                 >
                   {/* Icon */}
-                  <div className={cn(
-                    "w-8 h-8 rounded-md flex items-center justify-center transition-colors",
-                    isActive ? "bg-clr-primary text-clr-primary-foreground" : "bg-clr-surface text-clr-muted-foreground"
-                  )}>
+                  <div
+                    className={cn(
+                      "w-8 h-8 rounded-md flex items-center justify-center transition-colors",
+                      isActive
+                        ? "bg-clr-primary text-clr-primary-foreground"
+                        : "bg-clr-surface text-clr-muted-foreground"
+                    )}
+                  >
                     <Icon className="h-4 w-4" />
                   </div>
 
@@ -158,7 +174,7 @@ export function ThemeToggle() {
 
                   {/* Active Indicator */}
                   {isActive && <Check className="h-4 w-4 text-clr-primary" />}
-    </button>
+                </button>
               );
             })}
           </div>
@@ -167,4 +183,3 @@ export function ThemeToggle() {
     </div>
   );
 }
-
